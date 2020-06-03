@@ -10,6 +10,7 @@ namespace humhub\modules\sharebetween;
 
 use Yii;
 use yii\base\BaseObject;
+use humhub\modules\post\models\Post;
 
 class Events extends BaseObject
 {
@@ -35,7 +36,9 @@ class Events extends BaseObject
         $stackWidget = $event->sender;
         $content = $event->sender->object;
 
-        $stackWidget->addWidget(widgets\ShareLink::className(), ['content' => $content]);
+        if ($content instanceof  Post) {
+            $stackWidget->addWidget(widgets\ShareLink::className(), ['content' => $content]);
+        }
     }
 
 }

@@ -3,14 +3,14 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">
-                <?= Yii::t('SharebetweenModule.base', 'Shared!'); ?>
+                <?= Yii::t('SharebetweenModule.base', 'You can not allow to shared this post.'); ?>
             </h4>
         </div>
         <div class="modal-body text-center">
 
         </div>
         <div class="modal-footer">
-            <!-- //modal should automatically fade out without needing to press ok -->
+
             <button type="button" class="btn btn-primary"
                     data-dismiss="modal"><?php echo Yii::t('SharebetweenModule.base', 'OK'); ?></button>
 

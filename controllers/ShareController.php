@@ -16,19 +16,36 @@ class ShareController extends \humhub\components\Controller
         $content = Content::findOne(['id' => Yii::$app->request->get('id')]);
 
         if (!$content->canView()) {
-            throw new \yii\web\HttpException('400', 'Permission denied!');
+            // throw new \yii\web\HttpException('400', 'Permission denied!');
+            return $this->renderAjax('refused');
         }
 
         if (Yii::$app->request->isPost) {
             if (Yii::$app->request->get('self') == 1) {
-                Share::create($content, Yii::$app->user->getIdentity());
-                return $this->renderAjax('success');
+                        // Yii::Error($content);
+                        // Yii::Error(Yii::$app->user->getIdentity());
+                if (Share::createShareToUserProfile($content, Yii::$app->user->getIdentity())) {
+                    return $this->renderAjax('success');
+                } else {
+                    return $this->renderAjax('already');
+                }
             } else {
                 if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                    foreach ($model->getSpaces() as $space) {
-                        Share::create($content, $space);
+                    $counter = 0;
+                    foreach ($model->getSpaceContentContainer() as $spaceContainer) {
+                        // Yii::Error(var_dump($content));
+                        // Yii::Error(var_dump($spaceContainer));
+
+                        // Yii::Error('Begin try to share the post on Another Space.');
+                        if (Share::createShareToSpace($content, $spaceContainer)) {
+                            $counter += 1;
+                        }
                     }
-                    return $this->renderAjax('success');
+                    if ($counter>0) {
+                        return $this->renderAjax('success');
+                    } else {
+                        return $this->renderAjax('already');
+                    }
                 }
             }
         }
